@@ -1,0 +1,9 @@
+# PlatformIO project configuration files
+.pio
+
+# Ignore annoying macOS system files.
+.DS_Store
+
+# Ignore jetbrains IDE files
+.idea
+pc_grapher/.idea
