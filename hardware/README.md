@@ -10,7 +10,7 @@ To build the electronics you will need the following components:
 - Component 1
 - Component 2
 
-The schematic can be found [here]().
+The schematic can be found [here](Schematics.pdf).
 
 ## Enclosure
 
