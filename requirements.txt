@@ -1,0 +1,4 @@
+appdirs==1.4.4
+matplotlib==3.9.1
+numpy==2.0.1
+tkscrollableframe==2.2
