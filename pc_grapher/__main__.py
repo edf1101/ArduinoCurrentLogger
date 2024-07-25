@@ -62,6 +62,7 @@ class Application:
         self.__grapher.set_value_label(self.__current_data.get_value_type())
         self.__grapher.plot(data[0], data[1], 'r')
         self.__gui.update_graph()
+        self.__gui.top_menu.update_text_info_box(self.__current_data)
 
 
 if __name__ == "__main__":

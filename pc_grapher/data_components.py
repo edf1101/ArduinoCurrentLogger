@@ -78,6 +78,58 @@ class GraphData:
 
         return self.__file_name
 
+    def get_max_value(self) -> float:
+        """
+        Returns the maximum value in the data.
+
+        :return: The maximum value in the data.
+        """
+
+        return round(max(self.__value_data), 1)
+
+    def get_average_value(self) -> float:
+        """
+        Returns the average value in the data.
+
+        :return: The average value in the data.
+        """
+
+        return round(sum(self.__value_data) / len(self.__value_data), 1)
+
+    def get_min_value(self) -> float:
+        """
+        Returns the minimum value in the data.
+
+        :return: The minimum value in the data.
+        """
+
+        return round(min(self.__value_data), 1)
+
+    def get_mah(self) -> float:
+        """
+        Returns the mAh of the data.
+
+        :return: The mAh of the data.
+        """
+
+        if self.__value_type != "CURRENT":
+            return 0
+
+        return round(self.get_average_value() * self.__time_data[-1] / 3600.0, 1)
+
+    def time_to_run_out(self, battery_capacity: float) -> float:
+        """
+        Returns the time to run out of the battery.
+
+        :param battery_capacity: The capacity of the battery in mAh.
+        :return: The time to run out of the battery.
+        """
+
+        if self.__value_type != "CURRENT":
+            return 0
+
+        return round(battery_capacity / self.get_average_value(), 3)
+
 
 def is_valid_file(file_name: str) -> bool:
     """

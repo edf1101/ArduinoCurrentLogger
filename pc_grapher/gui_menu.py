@@ -40,6 +40,7 @@ class MenuGUI(tk.Frame):
         self.__file_data = tk.Frame(self, relief=tk.RAISED, borderwidth=3)
         self.__file_data.grid(row=0, column=1, sticky="nsew")
         self.__file_data.columnconfigure(0, minsize=200, weight=1)
+        self.__file_data_text = None
 
         self.__board_select = tk.Frame(self, relief=tk.RAISED, borderwidth=3)
         self.__board_select.grid(row=0, column=2, sticky="nsew")
@@ -76,11 +77,24 @@ class MenuGUI(tk.Frame):
         scrollbar.pack(side=tk.LEFT, fill=tk.BOTH)
 
         # Insert elements into the listbox
-        for values in data_components.get_all_valid_files():
-            self.__file_listbox.insert(tk.END, values)
+        self.__update_listbox_values()
 
         self.__file_listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.__file_listbox.yview)
+
+    def __update_listbox_values(self) -> None:
+        """
+        This function updates the listbox values if it is changed.
+
+        :return: None
+        """
+
+        list_values = sorted(list(self.__file_listbox.get(0, tk.END)))
+        current_values = sorted(list(data_components.get_all_valid_files()))
+        if list_values != current_values:
+            self.__file_listbox.delete(0, tk.END)
+            for values in current_values:
+                self.__file_listbox.insert(tk.END, values)
 
     def __on_file_select_change(self, _) -> None:
         """
@@ -93,6 +107,7 @@ class MenuGUI(tk.Frame):
 
         # get the selected file
         selected_file = self.__file_listbox.get(self.__file_listbox.curselection())
+        self.__update_listbox_values()
         self.__main_app.on_file_selected(selected_file)
 
     def __setup_file_data(self):
@@ -103,6 +118,40 @@ class MenuGUI(tk.Frame):
         # draw a title at the top
         title = tk.Label(self.__file_data, text="File Data", font=("Arial", 20, 'bold'))
         title.grid(row=0, column=0, sticky="nsew")
+        self.__file_data.update()
+        self.__file_data_text = tk.Text(self.__file_data, wrap=tk.WORD, font=("Arial", 12),
+                                        width=1, height=8)
+        self.__file_data_text.grid(row=1, column=0, sticky="nsew")
+
+    def update_text_info_box(self, file_data: data_components.GraphData) -> None:
+        """
+        This function updates the text box with the file data.
+
+        :param file_data: The file data to display.
+        :return: None
+        """
+
+        units: str = ''
+        match file_data.get_value_type():
+            case "CURRENT":
+                units = "mA"
+            case "VOLTAGE":
+                units = "V"
+            case _:
+                units = ''
+
+        # get the selected file
+        text: str = (f'File name: {file_data.get_file_name()}\n'
+                     f'Value Type: {file_data.get_value_type()}\n'
+                     f'Minimum Value: {file_data.get_min_value()}{units}\n'
+                     f'Maximum Value: {file_data.get_max_value()}{units}\n'
+                     f'Average Value: {file_data.get_average_value()}{units}\n')
+        if file_data.get_value_type() == "CURRENT":
+            text += (f'mAH used: {file_data.get_mah()}mAH\n'
+                     f'Time to run out 2000 mAH cell: {file_data.time_to_run_out(2000)}h')
+
+        self.__file_data_text.delete(1.0, tk.END)
+        self.__file_data_text.insert(tk.END, text)
 
     def __setup_board_select(self):
         """

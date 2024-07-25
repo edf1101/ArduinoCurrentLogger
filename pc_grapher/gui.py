@@ -27,7 +27,7 @@ class AppGUI(tk.Tk):
     It inherits from Tk and creates a ScrolledFrame object to display the main content.
     """
 
-    def __init__(self,main_app, grapher: Grapher) -> None:
+    def __init__(self, main_app, grapher: Grapher) -> None:
         """
         The constructor initialises the Tk object and creates a ScrolledFrame object to
         display the main content.
@@ -57,9 +57,9 @@ class AppGUI(tk.Tk):
         self.__inner_frame.rowconfigure(1, minsize=600, weight=3)
         self.__inner_frame.columnconfigure(0, minsize=self.__width, weight=1)
 
-        self.__top_menu = MenuGUI(main_app,self.__inner_frame, relief=tk.RAISED,
-                                  borderwidth=self.__ridge_size)
-        self.__top_menu.grid(row=0, column=0, sticky="nsew")
+        self.top_menu = MenuGUI(main_app, self.__inner_frame, relief=tk.RAISED,
+                                borderwidth=self.__ridge_size)
+        self.top_menu.grid(row=0, column=0, sticky="nsew")
 
         self.__graph_area = tk.Frame(self.__inner_frame, relief=tk.RAISED,
                                      borderwidth=self.__ridge_size)
@@ -69,7 +69,7 @@ class AppGUI(tk.Tk):
         self.__map_widget = self.__canvas.get_tk_widget()
         self.update()
         self.__map_widget.config(width=self.__width - (2 * self.__ridge_size),
-                                 height=self.__height - self.__top_menu.winfo_height() -
+                                 height=self.__height - self.top_menu.winfo_height() -
                                         (2 * self.__ridge_size))
         self.__map_widget.grid(row=0, column=1, sticky="nsew", padx=1, pady=1)
         self.__last_graph_update = 0
